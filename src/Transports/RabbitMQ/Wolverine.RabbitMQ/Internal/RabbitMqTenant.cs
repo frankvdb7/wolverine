@@ -42,16 +42,20 @@ internal class RabbitMqTenant
             });
         }
 
-        // Clone the parent dead letter queue configuration so that
-        // tenant-specific queues are declared consistently
+        CloneDeadLetterQueue(parent);
+
+        return Transport!;
+    }
+
+    private void CloneDeadLetterQueue(RabbitMqTransport parent)
+    {
+        // Copy the parent dead letter queue configuration to the tenant
         Transport.DeadLetterQueue.Mode = parent.DeadLetterQueue.Mode;
         Transport.DeadLetterQueue.QueueName = parent.DeadLetterQueue.QueueName;
         Transport.DeadLetterQueue.ExchangeName = parent.DeadLetterQueue.ExchangeName;
         Transport.DeadLetterQueue.BindingName = parent.DeadLetterQueue.BindingName;
         Transport.DeadLetterQueue.ConfigureQueue = parent.DeadLetterQueue.ConfigureQueue;
         Transport.DeadLetterQueue.ConfigureExchange = parent.DeadLetterQueue.ConfigureExchange;
-
-        return Transport!;
     }
 
     public Task ConnectAsync(RabbitMqTransport parent, IWolverineRuntime runtime)
