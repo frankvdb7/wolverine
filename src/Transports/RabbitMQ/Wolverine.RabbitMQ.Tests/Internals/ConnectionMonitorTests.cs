@@ -34,11 +34,10 @@ public class ConnectionMonitorTests
     public async Task configured_channel_options_enable_publisher_confirmations()
     {
         var transport = new RabbitMqTransport();
-        transport.ConfigureChannelOptions(options => new CreateChannelOptions(
-            true,
-            options.PublisherConfirmationTrackingEnabled,
-            options.OutstandingPublisherConfirmationsRateLimiter,
-            options.ConsumerDispatchConcurrency));
+        transport.ConfigureChannelOptions(options => options with
+        {
+            PublisherConfirmationsEnabled = true
+        });
 
         var monitor = new ConnectionMonitor(transport, ConnectionRole.Sending);
 
@@ -62,11 +61,10 @@ public class ConnectionMonitorTests
     {
         var parent = new RabbitMqTransport();
         parent.ConfigureFactory(f => f.HostName = "localhost");
-        parent.ConfigureChannelOptions(options => new CreateChannelOptions(
-            true,
-            options.PublisherConfirmationTrackingEnabled,
-            options.OutstandingPublisherConfirmationsRateLimiter,
-            options.ConsumerDispatchConcurrency));
+        parent.ConfigureChannelOptions(options => options with
+        {
+            PublisherConfirmationsEnabled = true
+        });
 
         var tenant = new RabbitMqTenant("tenant", "virtual");
         tenant.Compile(parent);

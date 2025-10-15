@@ -64,6 +64,13 @@ public class RabbitMqTransportExpression : BrokerExpression<RabbitMqTransport, R
         return this;
     }
 
+    /// <summary>
+    /// Customize the <see cref="CreateChannelOptions"/> used when Wolverine opens Rabbit MQ channels.
+    /// Use this to enable publisher confirmations or adjust other channel behaviors.
+    /// </summary>
+    /// <param name="configure">Callback that receives the current options and returns the desired configuration.</param>
+    /// <returns>The original <see cref="RabbitMqTransportExpression"/> for fluent configuration.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configure"/> is <c>null</c>.</exception>
     public RabbitMqTransportExpression ConfigureChannelOptions(Func<CreateChannelOptions, CreateChannelOptions> configure)
     {
         Transport.ConfigureChannelOptions(configure);
