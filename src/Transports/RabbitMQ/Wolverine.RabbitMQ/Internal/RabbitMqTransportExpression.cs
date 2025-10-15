@@ -64,6 +64,12 @@ public class RabbitMqTransportExpression : BrokerExpression<RabbitMqTransport, R
         return this;
     }
 
+    public RabbitMqTransportExpression ConfigureChannelOptions(Func<CreateChannelOptions, CreateChannelOptions> configure)
+    {
+        Transport.ConfigureChannelOptions(configure);
+        return this;
+    }
+
     /// <summary>
     /// Make any necessary customizations to the Rabbit MQ client's ConnectionFactory
     /// </summary>
