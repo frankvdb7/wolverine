@@ -20,6 +20,7 @@
         <ProjectReference Include="..\Wolverine.RabbitMQ\Wolverine.RabbitMQ.csproj"/>
         <ProjectReference Include="..\..\..\Persistence\Wolverine.SqlServer\Wolverine.SqlServer.csproj" />
         <ProjectReference Include="..\..\..\Testing\Wolverine.ComplianceTests\Wolverine.ComplianceTests.csproj" />
+        <ProjectReference Include="..\..\..\Wolverine\Wolverine.csproj" />
     </ItemGroup>
 
     <ItemGroup>

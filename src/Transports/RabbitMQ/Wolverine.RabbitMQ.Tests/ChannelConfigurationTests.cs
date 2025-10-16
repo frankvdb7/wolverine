@@ -6,6 +6,7 @@ using Wolverine.RabbitMQ;
 using Wolverine.RabbitMQ.Internal;
 using Xunit;
 
+
 namespace Wolverine.RabbitMQ.Tests;
 
 public class ChannelConfigurationTests
