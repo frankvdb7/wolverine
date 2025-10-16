@@ -88,7 +88,7 @@ public class RabbitMqTransportExpression : BrokerExpression<RabbitMqTransport, R
     /// <param name="configure"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public RabbitMqTransportExpression ConfigureChannelCreation(Action<CreateChannelOptions> configure)
+    public RabbitMqTransportExpression ConfigureChannelCreation(Action<WolverineRabbitMqChannelOptions> configure)
     {
         if (configure == null)
         {

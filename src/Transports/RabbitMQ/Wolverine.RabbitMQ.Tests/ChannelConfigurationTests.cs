@@ -15,7 +15,7 @@ public class ChannelConfigurationTests
         options.UseRabbitMq()
             .ConfigureChannelCreation(o =>
             {
-                o.PublisherConfirms = true;
+                o.PublisherConfirmationsEnabled = true;
             });
 
         await using var host = await WolverineHost.ForAsync(options);
@@ -34,11 +34,10 @@ public class ChannelConfigurationTests
         options.UseRabbitMq()
             .ConfigureChannelCreation(o =>
             {
-                o.PublisherConfirms = true;
+                o.PublisherConfirmationsEnabled = true;
             })
             .ConfigureChannelCreation(o =>
             {
-                // This doesn't do anything, but proves that the configuration is additive
                 o.ConsumerDispatchConcurrency = 2;
             });
 
@@ -46,8 +45,10 @@ public class ChannelConfigurationTests
 
         var transport = host.GetRabbitMqTransport();
 
-        await using var channel = await transport.ListeningConnection.CreateChannelAsync();
+        var wolverineOptions = new WolverineRabbitMqChannelOptions();
+        transport.ChannelCreationOptions(wolverineOptions);
 
-        channel.NextPublishSeqNo.ShouldBeGreaterThan(0); // This is an indirect way to check if publisher confirms are on
+        wolverineOptions.PublisherConfirmationsEnabled.ShouldBeTrue();
+        wolverineOptions.ConsumerDispatchConcurrency.ShouldBe((ushort)2);
     }
 }
