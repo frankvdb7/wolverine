@@ -95,7 +95,7 @@ public class RabbitMqTransportExpression : BrokerExpression<RabbitMqTransport, R
             throw new ArgumentNullException(nameof(configure));
         }
 
-        Transport.ChannelCreationOptions = configure;
+        Transport.ChannelCreationOptions += configure;
 
         return this;
     }

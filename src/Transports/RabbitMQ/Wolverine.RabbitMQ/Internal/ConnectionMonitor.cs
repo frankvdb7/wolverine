@@ -47,7 +47,7 @@ internal class ConnectionMonitor : IAsyncDisposable, IConnectionMonitor
     {
         if (_connection == null) throw new InvalidOperationException("The connection is not initialized");
 
-        var options = new CreateChannelOptions();
+        var options = new CreateChannelOptions(false, false, null, 1);
         _transport.ChannelCreationOptions?.Invoke(options);
 
         return _connection!.CreateChannelAsync(options);
