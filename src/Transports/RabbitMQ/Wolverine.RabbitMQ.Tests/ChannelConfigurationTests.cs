@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Wolverine;
+using Wolverine.RabbitMQ;
 using Wolverine.RabbitMQ.Internal;
 using Xunit;
 

@@ -1,5 +1,3 @@
-using RabbitMQ.Client.Impl;
-
 namespace Wolverine.RabbitMQ;
 
 /// <summary>
