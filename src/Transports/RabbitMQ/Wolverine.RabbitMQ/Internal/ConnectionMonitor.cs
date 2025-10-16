@@ -50,7 +50,7 @@ internal class ConnectionMonitor : IAsyncDisposable, IConnectionMonitor
         var wolverineOptions = new WolverineRabbitMqChannelOptions();
         _transport.ChannelCreationOptions?.Invoke(wolverineOptions);
 
-        var options = new CreateChannelOptions(wolverineOptions.PublisherConfirmationsEnabled, wolverineOptions.PublisherConfirmationTrackingEnabled, wolverineOptions.OutstandingPublisherConfirmationsRateLimiter, wolverineOptions.ConsumerDispatchConcurrency);
+        var options = new CreateChannelOptions(wolverineOptions.PublisherConfirmationsEnabled, wolverineOptions.PublisherConfirmationTrackingEnabled, consumerDispatchConcurrency: wolverineOptions.ConsumerDispatchConcurrency);
 
         return _connection!.CreateChannelAsync(options);
     }

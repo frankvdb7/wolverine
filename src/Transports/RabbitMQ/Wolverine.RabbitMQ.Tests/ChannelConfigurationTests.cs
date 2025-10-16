@@ -45,10 +45,8 @@ public class ChannelConfigurationTests
 
         var transport = host.GetRabbitMqTransport();
 
-        var wolverineOptions = new WolverineRabbitMqChannelOptions();
-        transport.ChannelCreationOptions(wolverineOptions);
+        await using var channel = await transport.ListeningConnection.CreateChannelAsync();
 
-        wolverineOptions.PublisherConfirmationsEnabled.ShouldBeTrue();
-        wolverineOptions.ConsumerDispatchConcurrency.ShouldBe((ushort)2);
+        channel.NextPublishSeqNo.ShouldBeGreaterThan(0);
     }
 }

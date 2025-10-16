@@ -18,11 +18,6 @@ public class WolverineRabbitMqChannelOptions
     public bool PublisherConfirmationTrackingEnabled { get; set; } = false;
 
     /// <summary>
-    ///     Rate limiter for outstanding publisher confirmations. Null by default.
-    /// </summary>
-    public RateLimiter? OutstandingPublisherConfirmationsRateLimiter { get; set; } = null;
-
-    /// <summary>
     ///     The consumer dispatch concurrency. 1 by default.
     /// </summary>
     public ushort? ConsumerDispatchConcurrency { get; set; } = 1;
