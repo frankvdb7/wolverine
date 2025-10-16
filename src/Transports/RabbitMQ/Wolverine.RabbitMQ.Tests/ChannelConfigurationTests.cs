@@ -1,29 +1,37 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
-using Wolverine;
 using Wolverine.RabbitMQ;
 using Wolverine.RabbitMQ.Internal;
+using Wolverine.Runtime;
 using Xunit;
-
 
 namespace Wolverine.RabbitMQ.Tests;
 
 public class ChannelConfigurationTests
 {
+    private IWolverineRuntime theRuntime;
+
+    public ChannelConfigurationTests()
+    {
+        var services = new ServiceCollection();
+        services.AddSingleton<ILoggerFactory>(new NullLoggerFactory());
+        theRuntime = new WolverineRuntime(new WolverineOptions(), new ServiceProvider(services));
+    }
+
     [Fact]
     public async Task can_customize_channel_creation()
     {
-        var options = new WolverineOptions();
-        options.UseRabbitMq()
-            .ConfigureChannelCreation(o =>
-            {
-                o.PublisherConfirmationsEnabled = true;
-            });
+        var transport = new RabbitMqTransport();
+        var expression = new RabbitMqTransportExpression(transport, new WolverineOptions());
+        expression.ConfigureChannelCreation(o =>
+        {
+            o.PublisherConfirmationsEnabled = true;
+        });
 
-        await using var host = await WolverineHost.ForAsync(options);
-
-        var transport = host.GetRabbitMqTransport();
+        await transport.ConnectAsync(theRuntime);
 
         await using var channel = await transport.ListeningConnection.CreateChannelAsync();
 
@@ -33,20 +41,18 @@ public class ChannelConfigurationTests
     [Fact]
     public async Task can_customize_channel_creation_additively()
     {
-        var options = new WolverineOptions();
-        options.UseRabbitMq()
-            .ConfigureChannelCreation(o =>
-            {
-                o.PublisherConfirmationsEnabled = true;
-            })
-            .ConfigureChannelCreation(o =>
-            {
-                o.ConsumerDispatchConcurrency = 2;
-            });
+        var transport = new RabbitMqTransport();
+        var expression = new RabbitMqTransportExpression(transport, new WolverineOptions());
+        expression.ConfigureChannelCreation(o =>
+        {
+            o.PublisherConfirmationsEnabled = true;
+        })
+        .ConfigureChannelCreation(o =>
+        {
+            o.ConsumerDispatchConcurrency = 2;
+        });
 
-        await using var host = await WolverineHost.ForAsync(options);
-
-        var transport = host.GetRabbitMqTransport();
+        await transport.ConnectAsync(theRuntime);
 
         await using var channel = await transport.ListeningConnection.CreateChannelAsync();
 
