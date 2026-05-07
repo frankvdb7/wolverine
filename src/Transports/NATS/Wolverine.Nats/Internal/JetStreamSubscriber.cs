@@ -131,10 +131,15 @@ internal class JetStreamSubscriber : INatsSubscriber
                         // These are typically NATS protocol messages that should not be processed by Wolverine.
                         if (_endpoint.MessageType == null && (msg.Headers == null || !msg.Headers.ContainsKey("message-type")))
                         {
+                            _logger.LogDebug(
+                                "Skipping NATS message without message-type header from subject {Subject}. DataLength={DataLength}, HasHeaders={HasHeaders}",
+                                msg.Subject,
+                                msg.Data.Length,
+                                msg.Headers != null
+                            );
                             await msg.AckAsync(cancellationToken: cancellation);
                             continue;
                         }
-
                         var envelope = new NatsEnvelope(null, msg);
                         _mapper.MapIncomingToEnvelope(envelope, msg);
 
